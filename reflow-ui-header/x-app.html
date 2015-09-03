@@ -1,0 +1,125 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../iron-media-query/iron-media-query.html">
+<link rel="import" href="../../../iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../../paper-button/paper-button.html">
+<link rel="import" href="reflow-clock.html">
+<dom-module id="x-app">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .timer-overlay {
+      width: 480px;
+      height: 285px;
+      background-color: white;
+      display: block;
+    }
+
+    .timer-overlay .time {
+      background-color: #00AC8D;
+      color: #FFFFFF;
+      font-size: 45px;
+      min-width: 158px;
+    }
+
+    .timer-overlay .clock {
+      width: 211px;
+      height: 211px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .timer-overlay .primary {
+      color: #FFFFFF;
+    }
+
+    .timer-overlay .secondary {
+      color: #B1E5DD;
+    }
+
+
+    @media (max-width: 640px) {
+      .timer-overlay  {
+        width: 240px;
+        height: 390px;
+      }
+
+      .timer-overlay .time {
+        height: 70px;
+        width: 240px;
+      }
+
+      .timer-overlay .options {
+        font-size: 14px;
+      }
+    }
+
+  </style>
+  <template>
+    <iron-media-query query="min-width: 640px" query-matches="{{largeScreen}}" on-query-matches-changed="_switchLayout">
+
+    <div class$="{{_adaptiveClass}}">
+
+      <!-- side clock -->
+      <div class="time layout vertical center-center">
+        <span class="layout horizontal">
+          <span class="primary">3</span>
+          <span class="secondary">:30</span>
+        </span>
+      </div>
+
+      <!-- primary clock -->
+      <div class="flex layout vertical">
+        <div class="flex layout horizontal center-center">
+          <div class="clock">
+            <reflow-clock></reflow-clock>
+          </div>
+        </div>
+
+       <!-- toolbar -->
+      <div class="layout horizontal">
+        <div class="flex"></div>
+        <div class="layout horizontal options">
+          <paper-button>Cancel</paper-button>
+          <paper-button>OK</paper-button>
+        </div>
+      </div>
+     </div>
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'x-app',
+
+      properties: {
+         largeScreen: {
+           type: Boolean,
+           value: true
+         },
+        _adaptiveClass: {
+          type: String,
+          value: 'layout horizontal timer-overlay'
+        }
+      },
+      _switchLayout: function() {
+        if (!this.largeScreen) {
+          this._adaptiveClass = 'layout horizontal timer-overlay';
+        } else {
+          this._adaptiveClass = 'layout vertical timer-overlay';
+        }
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,228 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../../polymer/polymer.html">
+
+<dom-module id="reflow-clock">
+  <template>
+    <style>
+    :host {
+      display: inline-block;
+      max-width: 340px;
+      white-space: nowrap;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      vertical-align: top;
+      overflow: hidden;
+    }
+
+    #widget-title {
+      font-size: 21px;
+      line-height: 15px;
+    }
+
+    #time {
+      display: none;
+    }
+
+    #clock {
+      position: relative;
+      width: 217px;
+      height: 218px;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      background-image: url('reflow-clockface.svg');
+      background-repeat: no-repeat;
+    }
+
+    #hour {
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-transform-origin: 50% 50%;
+      transform-origin: 0% 50%;
+      background: #4c4c4c;
+      height: 82px;
+      width: 6px;
+      border-radius: 3px;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    #minute {
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-transform-origin: 50% 50%;
+      transform-origin: 50% 50%;
+      background: #4c4c4c;
+      height: 92px;
+      width: 4px;
+      border-radius: 2px;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    #second {
+      position: absolute;
+      top: 0;
+      left: 0;
+      /*background: #00AC8D; re-enable if dropping the SVG hand */
+      height: 100px;
+      width: 2px;
+      border-radius: 1px;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      opacity: 0.5;
+    }
+
+    #dot {
+      box-sizing: border-box;
+      width:10px;
+      height:10px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -1px;
+      background-color: #00AC8D;
+    }
+
+</style>
+    <div id="widget-title" hidden><span>{{dateStr}}</span></div>
+
+    <div id="clock">
+       <div id="second" style$="{{computeStyle(rotateSecond, xSecond, ySecond)}}"><img src="pesto-clock-hand.svg" style="transform: rotate(270deg) translate(-36%, -178%);"></div>
+       <div id="minute" style$="{{computeStyle2(rotateMinute, xMinute, yMinute)}}"></div>
+       <div id="hour" style$="{{computeStyle3(rotateHour, xHour, yHour)}}"></div>
+        <div id="dot"></div>
+    </div>
+    <div id="time">{{ time }}</div>
+  </template>
+  <script>
+    (function () {
+
+      // statics
+      var days = [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+      ];
+      var months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+
+      var degToRad = Math.PI / 180;
+
+      Polymer({
+
+        is: 'reflow-clock',
+
+        properties: {
+          dateStr: {
+            type: String,
+            notify: true,
+            value: ''
+          },
+          time: {
+            value: null,
+            observer: 'timeChanged'
+          },
+
+          hours: { observer: 'hoursChanged' },
+          minutes: { observer: 'minutesChanged' },
+          seconds: { observer: 'secondsChanged' }
+        },
+        attached: function () {
+          // when we are inserted into DOM, start watching the time
+          this.updateTime();
+          this.interval = setInterval(this.updateTime.bind(this), 1000);
+        },
+        detached: function () {
+          // when we are removed from DOM, stop watching the time
+          clearInterval(this.interval);
+        },
+        updateTime: function () {
+          // get a current dateTime
+          this.time = new Date();
+        },
+        timeChanged: function () {
+          if (this.time === null) { return; }
+          // if the time has changed, update the dateStr, hours, minutes, and seconds
+          this.dateStr = [
+            days[this.time.getDay()],
+            months[this.time.getMonth()],
+            this.time.getDate()
+          ].join(' ');
+
+          this.hours = this.time.getHours();
+          this.minutes = this.time.getMinutes();
+          this.seconds = this.time.getSeconds();
+        },
+        secondsChanged: function () {
+          // if seconds have changed, update the clock second hand
+          this.rotateSecond = this.seconds * 6;
+          var px = -11;
+          var py = 38;
+          px = px - 49 * Math.sin(this.rotateSecond * degToRad);
+          py = py + 49 * Math.cos(this.rotateSecond * degToRad);
+          this.xSecond = 99 - px;
+          this.ySecond = 99 - py;
+        },
+        minutesChanged: function () {
+          // if minutes have changed, update the clock minute hand
+          this.rotateMinute = this.minutes * 6;
+          var px = -12;
+          var py = 33;
+          px = px - 44 * Math.sin(this.rotateMinute * degToRad);
+          py = py + 44 * Math.cos(this.rotateMinute * degToRad);
+          this.xMinute = 99 - px;
+          this.yMinute = 99 - py;
+        },
+        hoursChanged: function () {
+          // if hours have changed, update the clock hour hand
+          this.rotateHour = this.hours * 30;
+          var px = -12;
+          var py = 31;
+          px = px - 38 * Math.sin(this.rotateHour * degToRad);
+          py = py + 38 * Math.cos(this.rotateHour * degToRad);
+          this.xHour = 99 - px;
+          this.yHour = 99 - py;
+        },
+        computeStyle: function (rotateSecond, xSecond, ySecond) {
+          return '-webkit-transform: translate3d(' + xSecond + 'px,' + ySecond + 'px,0) rotate(' + rotateSecond + 'deg); transform: translate3d(' + xSecond + 'px,' + ySecond + 'px,0) rotate(' + rotateSecond + 'deg);';
+        },
+        computeStyle2: function (rotateMinute, xMinute, yMinute) {
+          return '-webkit-transform: translate3d(' + xMinute + 'px,' + yMinute + 'px,0) rotate(' + rotateMinute + 'deg); transform: translate3d(' + xMinute + 'px,' + yMinute + 'px,0) rotate(' + rotateMinute + 'deg);';
+        },
+        computeStyle3: function (rotateHour, xHour, yHour) {
+          return '-webkit-transform: translate3d(' + xHour + 'px,' + yHour + 'px,0) rotate(' + rotateHour + 'deg); transform: translate3d(' + xHour + 'px,' + yHour + 'px,0) rotate(' + rotateHour + 'deg);';
+        }
+      });
+    }());
+  </script>
+</dom-module>
