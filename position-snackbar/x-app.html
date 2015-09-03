@@ -57,18 +57,20 @@ Mobile snackbars are at the bottom, because it’s never far from the thing you 
 
     Polymer({
       is: 'x-app',
-      relatives: {
-        type: Boolean,
-        value: false
+      properties : {
+        relatives: {
+          type: Boolean,
+          value: false
+        }
       },
       _showToast: function() {
         this.$.toast.show();
       },
       _getPositionPreference: function(relativePosition) {
-        return (relativePosition? "relatives vertical" : "");
+        return (relativePosition? 'relatives vertical' : '');
       },
       _getAdaptiveLayout: function(largeScreen) {
-        return "layout vertical " + (largeScreen? "end" : "center-center");
+        return 'layout vertical ' + (largeScreen? 'end' : 'center-center');
       }
     });
 
