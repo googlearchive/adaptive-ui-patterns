@@ -1,0 +1,333 @@
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link href="../../../polymer/polymer.html" rel="import" >
+<link href="../../../neon-animation/neon-shared-element-animatable-behavior.html" rel="import">
+<link href="../../../paper-toolbar/paper-toolbar.html" rel="import">
+<link href="../../../paper-icon-button/paper-icon-button.html" rel="import">
+<link href="../../../paper-fab/paper-fab.html" rel="import">
+<link href="../../../iron-icons/iron-icons.html" rel="import">
+<link href="../../../iron-icons/av-icons.html" rel="import">
+<link href="../../../iron-flex-layout/classes/iron-flex-layout.html" rel="import">
+<link href="x-songlist.html" rel="import">
+<dom-module id="fullsize-page-with-card">
+
+  <link rel="import" type="css" href="x-app.css">
+
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    .fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .card {
+      position: relative;
+      margin: 250px 275px 0;
+      height: 700px;
+    }
+
+    .fade {
+        -webkit-animation: fadein 2s;
+        -moz-animation: fadein 2s;
+        -ms-animation: fadein 2s;
+        -o-animation: fadein 2s;
+        animation: fadein 2s;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    .album-art {
+      width: 360px;
+    }
+    .album-art img {
+      width: 360px;
+    }
+
+    .album-name {
+      font-size: 40px;
+      font-weight: 300;
+    }
+
+    .artist-name {
+      font-size: 20px;
+      font-weight: 300;
+    }
+
+    .album-details .album-text {
+      margin-left: 40px;
+      max-height: 300px;
+      min-height: 242px;
+    }
+
+    .album-toolbar {
+      background: transparent;
+    }
+
+    .lowerbar {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    x-songlist {
+      height: 100%;
+    }
+
+    #card paper-fab {
+      position: absolute;
+      right: 30px;
+      top: 278px;
+    }
+
+    .fixed-background-toolbar {
+      background: transparent;
+    }
+
+    @media (max-width: 1288px) {
+      #card {
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #card .container {
+        @apply(--layout-vertical);
+      }
+
+      #card .album-art {
+        height: 360px;
+      }
+
+      #card .album-art img {
+        width: 100%;
+        @apply(--layout-fit);
+      }
+
+      #card .album-details .album-text {
+        margin-left: 25px;
+        min-height: 90px;
+        max-height: none;
+        margin-top: 10px;
+      }
+
+      #card .album-name {
+        font-size: 30px;
+      }
+
+      #card .artist-name {
+        font-size: 20px;
+      }
+
+      .fixed-background-toolbar {
+        display: none;
+      }
+
+      #card paper-fab {
+        right: 17px;
+        top: 388px;
+      }
+    }
+  </style>
+
+  <template>
+
+    <div id="fixed" class$="[[_computeFixedBackgroundClass(color)]]"></div>
+
+    <div class="layout fit fade" style$="[[_computeBackgroundImageStyle(largeUrl)]]"></div>
+
+    <paper-toolbar class="fixed-background-toolbar">
+      <paper-icon-button icon="arrow-back"></paper-icon-button>
+      <span>[[artist]]</span>
+      <span class="flex"></span>
+      <paper-icon-button icon="search"></paper-icon-button>
+    </paper-toolbar>
+
+    <!-- card for the fullsize view -->
+    <div id="card" class$="[[_computeCardClass(color)]]">
+
+      <div class="container layout horizontal">
+        <!-- album cover -->
+        <div class="layout horizontal album-art">
+          <img src$="[[url]]" class="fit">
+        </div>
+
+        <!-- details panel -->
+        <div class="layout vertical album-details flex">
+
+          <paper-toolbar class="album-toolbar">
+            <span class="flex"></span>
+            <paper-icon-button icon="star"></paper-icon-button>
+          </paper-toolbar>
+
+          <div class="album-text layout vertical">
+            <span class="album-name">[[album]]</span>
+            <span class="artist-name">[[artist]]</span>
+          </div>
+
+          <div class$="[[_computeBackgroundClass(color)]]">
+              <paper-fab icon="av:playlist-add" class$="[[_computeFabClass(fab)]]"></paper-fab>
+              <div class="horizontal layout center-center relative">
+                  <span class="flex"></span>
+                  <iron-icon icon="av:fast-rewind"></iron-icon>
+                  <iron-icon icon="av:play-arrow" class="flex"></iron-icon>
+                  <iron-icon icon="av:fast-forward"></iron-icon>
+                  <span class="flex"></span>
+              </div>
+          </div>
+        </div>
+
+
+      </div>
+      <x-songlist class="fade"></x-songlist>
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'fullsize-page-with-card',
+
+    behaviors: [
+      Polymer.NeonSharedElementAnimatableBehavior
+    ],
+
+    properties: {
+
+      color: {
+        type: String
+      },
+
+      artist: {
+        type: String
+      },
+
+      album: {
+        type: String
+      },
+
+      url: {
+        type: String
+      },
+
+      sharedElements: {
+        type: Object,
+        value: function() {
+          return {
+            'hero': this.$.card,
+            'ripple': this.$.fixed
+          }
+        }
+      },
+
+      animationConfig: {
+        type: Object,
+        value: function() {
+          return {
+            'entry': [{
+              name: 'ripple-animation',
+              id: 'ripple',
+              toPage: this,
+            }, {
+              name: 'hero-animation',
+              id: 'hero',
+              toPage: this,
+              timing: {
+                delay: 150
+              }
+            }],
+            'exit': [{
+              name: 'fade-out-animation',
+              node: this.$.fixed
+            }, {
+              name: 'transform-animation',
+              transformFrom: 'none',
+              transformTo: 'translate(0px,-200vh) scale(0.9,1)',
+              node: this.$.card
+            }]
+          }
+        }
+      }
+
+    },
+    _computeCardClass: function(color) {
+      var cls = 'card';
+      if (color) {
+        cls += ' ' + color + '-300';
+      }
+      return cls;
+    },
+
+    /**
+     * Compute class color for the specified album
+     * @param  {String} color Pre-specified class name
+     * @return {String}       fixed + ' ' + color + -100
+     */
+    _computeFixedBackgroundClass: function(color) {
+      var cls = 'fixed';
+      if (color) {
+        cls += ' ' + color + '-100';
+      }
+      return cls;
+    },
+
+    _computeFabClass: function(fabColor) {
+      return fabColor || '';
+    },
+
+    _computeBackgroundClass: function(color) {
+      var cls = 'lowerbar flex'
+      if (color) {
+        cls += ' ' + color + '-100';
+      }
+      return cls;
+    },
+    /**
+     * Computed the inline style for a background image to be used for this view.
+     * @param  {String} url URL for the background image
+     * @return {String}     Inline image string containing background and size
+     */
+    _computeBackgroundImageStyle: function(url) {
+      var stl = '';
+      if (url !== undefined && url !== 'undefined') {
+        stl = 'background-image: url("'+ url + '"); background-size: cover;';
+      } else {
+        stl = 'background-color: black';
+      }
+      return stl;
+    },
+
+  });
+
+</script>
