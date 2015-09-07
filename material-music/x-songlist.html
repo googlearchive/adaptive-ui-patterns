@@ -1,0 +1,84 @@
+<link href="../../../polymer/polymer.html" rel="import">
+<link href="../../../iron-icons/iron-icons.html" rel="import">
+<link href="../../../iron-icons/av-icons.html" rel="import">
+<link href="../../../iron-flex-layout/classes/iron-flex-layout.html" rel="import">
+
+<dom-module id="x-songlist">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .album-list {
+      background: #FFFFFF;
+      height: 100%;
+      color: black;
+      padding: 10px;
+      font-size: 20px;
+    }
+
+    .album-list table {
+      width: 100%;
+    }
+
+    .album-list iron-icon {
+      color: #FF4081;
+    }
+
+    .album-list td {
+      width: 100%;
+    }
+
+    .album-list td:nth-child(1) {
+      width: 10%;
+      color: #ADADAD;
+    }
+
+    .album-list td:nth-child(2) {
+      width: 60%;
+      text-align: left;
+    }
+
+    .album-list td:nth-child(3) {
+      width: 20%;
+      text-align: right;
+      color: #ADADAD;
+    }
+  </style>
+  <template>
+      <div class="album-list layout horizontal flex">
+          <table>
+            <template is="dom-repeat" items="{{songs}}">
+              <tr>
+                  <td>[[item.index]]</td>
+                  <td>[[item.name]]</td>
+                  <td>[[item.duration]]</td>
+              </tr>
+            </template>
+          </table>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'x-songlist',
+      properties: {
+        songs: {
+          type: Array,
+          notify: true,
+          value: []
+        }
+      },
+      ready: function () {
+        var songs = [];
+        for (var i=0; i<20; i++) {
+          songs.push({
+            index: i,
+            duration: '3:54',
+            name: 'Song name'
+          });
+        }
+        this.songs = songs;
+      }
+    });
+  </script>
+</dom-module>
