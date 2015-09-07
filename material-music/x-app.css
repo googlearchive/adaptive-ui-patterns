@@ -1,0 +1,147 @@
+/*
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+:host {
+  display: block;
+  overflow: hidden;
+  position: fixed;
+}
+
+neon-animated-pages {
+  height: 100%;
+}
+
+/**
+ * Todo: clean-up all classes so they are grouped
+ * by artist. Eventually we should just switch to
+ * using a ColorThief/palette-library so values are
+ * dynamically generated and cached.
+ */
+
+.red-100 {
+  background: #E61D62;
+}
+
+.yellow-100 {
+  background: var(--google-yellow-100);
+}
+
+.blue-100 {
+  background: var(--google-blue-100);
+}
+
+.green-100 {
+  background: var(--google-green-100);
+}
+
+.purple-100 {
+  background: #B11972;
+}
+
+.red-300 {
+  background: #A41251;
+  color: #FFFFFF;
+}
+
+.yellow-300 {
+  background: var(--google-yellow-300);
+}
+
+.blue-300 {
+  background: #31425B;
+  color: #FFFFFF;
+}
+
+.green-300 {
+  background: var(--google-green-300);
+}
+
+.purple-300 {
+  background: #72185F;
+  color: #FFFFFF;
+}
+
+.yellow-300 {
+  background: #D9BF00;
+  color: #212121;
+}
+
+.jackson-300 {
+  background: #383C80;
+  color: #FFFFFF;
+}
+
+.sap-300 {
+  background: #4C7B35;
+  color: #FFFFFF;
+}
+
+.charcoal-300 {
+  background: #32444D;
+  color: #FFFFFF;
+}
+
+.vivid-300 {
+  background: #9A1E46;
+  color: #FFFFFF;
+}
+
+.william-300 {
+  background: #3C6875;
+  color: #FFFFFF;
+}
+
+.portrage-300 {
+  background: #8AA2D6;
+  color: #FFFFFF;
+}
+
+.white {
+  background: #FFFFFF;
+}
+
+.athens-300 {
+  background: #DFDFDF;
+}
+
+.jagular-300 {
+  background: #292830;
+  color: #FFFFFF;
+}
+
+.yuna-yellow {
+  background: #FFEA01;
+  color: black;
+}
+
+.ellie-blue {
+  background: #03E5FF;
+  color: black;
+}
+
+.pharrell-fab {
+  background: #212121;
+  color: white;
+}
+
+.mulberry-300 {
+  background: #501813;
+  color: white;
+}
+
+.egyptian-blue-300 {
+  background: #1441A4;
+  color: white;
+}
+
+
+
+
+
+
