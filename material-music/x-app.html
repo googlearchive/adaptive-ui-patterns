@@ -1,0 +1,54 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/paper-styles.html">
+<link rel="import" href="../../../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../../neon-animation/neon-animations.html">
+<link rel="import" href="animated-grid.html">
+<link rel="import" href="fullsize-page-with-card.html">
+
+<dom-module id="x-app">
+
+  <link rel="import" type="css" href="x-app.css">
+
+  <template>
+     <neon-animated-pages id="pages" selected="0">
+
+        <animated-grid id="grid" on-tile-click="_onTileClick"></animated-grid>
+
+        <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
+        </fullsize-page-with-card>
+
+      </neon-animated-pages>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'x-app',
+      _onTileClick: function(event) {
+        /* Todo: coalese into this.$['fullsize-card'].data = event.detail.data */
+        /* Current form is far too spaghetti-like. */
+        this.$['fullsize-card'].color = event.detail.data.color;
+        this.$['fullsize-card'].artist = event.detail.data.artist;
+        this.$['fullsize-card'].album = event.detail.data.album;
+        this.$['fullsize-card'].url = event.detail.data.url;
+        this.$['fullsize-card'].fab = event.detail.data.fab;
+        this.$['fullsize-card'].largeUrl = event.detail.data.largeUrl;
+        this.$.pages.selected = 1;
+      },
+      _onFullsizeClick: function(event) {
+        this.$.pages.selected = 0;
+      }
+    });
+  </script>
+
+</dom-module>

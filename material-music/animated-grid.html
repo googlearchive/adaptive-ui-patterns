@@ -1,0 +1,233 @@
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/paper-styles.html">
+<link rel="import" href="../../../iron-image/iron-image.html">
+<link rel="import" href="../../../iron-icons/av-icons.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../neon-animation/neon-shared-element-animatable-behavior.html">
+
+<dom-module id="animated-grid">
+
+  <link rel="import" type="css" href="x-app.css">
+
+  <style>
+
+    :host {
+      display: block;
+      background: #000;
+    }
+
+    .tile {
+      display: inline-block;
+      float: left;
+      vertical-align: bottom;
+      width: calc(100% / 6);
+      height: calc(100% / 3);
+      position: relative;
+      box-sizing: border-box;
+      border: 2px solid black;
+
+      /**
+       * Display the middle of the album art unless we
+       * can guarantee background -> contain will look
+       * better.
+       */
+      background-repeat:no-repeat;
+      background-size: cover;
+      background-position: 50%;
+
+      @apply(--paper-font-title);
+      @apply(--layout-self-end);
+      @apply(--layout-center-center);
+    }
+
+    .tile:nth-of-type(1) {
+      width: calc(100% / 3);
+      height: calc(100% / 3 * 2);
+    }
+
+    .tile:nth-of-type(6) {
+      width: calc(100% / 3);
+      height: calc(100% / 3 * 2);
+    }
+
+    .tile:nth-of-type(9) {
+      position: absolute;
+      top: calc(100% / 3 * 2);
+      left: 0;
+      width: calc(100% / 6);
+      height: calc(100% / 3);
+    }
+
+    .tile:nth-of-type(10) {
+      position: absolute;
+      top: calc(100% / 3 * 2);
+      left: calc(100% / 6);
+      width: calc(100% / 6);
+      height: calc(100% / 3);
+    }
+
+    .footer {
+      box-sizing: border-box;
+      padding: 16px;
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      bottom: 0;
+      position: absolute;
+    }
+
+    .tile .animated-grid {
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    .tile .artist {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 19px;
+    }
+
+    .tile:nth-of-type(8), .tile:nth-of-type(9) {
+      background-size: cover;
+      background-position: 50%;
+    }
+
+    @media (min-width: 1288px) {
+      /* There's enough vert/horz space for artwork to use contain */
+      .tile {
+        background-size: contain;
+        background-position: initial;
+      }
+
+      /* For tiles that still don't work well on contain, revert to cover */
+      .tile:nth-of-type(1), .tile:nth-of-type(7), .tile:nth-of-type(6) {
+        background-size: cover;
+        background-position: 50%;
+      }
+    }
+    @media (max-width: 640px) {
+      .tile,
+      .tile:nth-of-type(n) {
+        width: calc(100%/2);
+        height: calc(100% / 3);
+        position: relative;
+      }
+    }
+  </style>
+
+  <template>
+
+    <template is="dom-repeat" items="[[config]]">
+      <div class="tile" style$="[[_computeStyle(item.url, item.color)]]" class="horizontal layout start">
+        <div class$="[[_computeTileClass(item.color)]]">
+          <div class="">
+            <div class="album">[[item.album]]</div>
+            <div class="artist">[[item.artist]]</div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'animated-grid',
+
+    behaviors: [
+      Polymer.NeonSharedElementAnimatableBehavior
+    ],
+
+    properties: {
+
+      config: {
+        type: Array,
+        value: function() {
+          return [
+            {value: 1, color: 'blue', artist: 'Kodaline', album: 'In A Perfect World', url: 'images/kodaline.jpg'},
+            {value: 2, color: 'red', fab: 'yuna-yellow', artist: 'Yuna', album: 'Lights and Camera', url: 'images/artworks-000060971310-g3znsu-t500x500.jpg', largeUrl: 'images/yuna-a47c1e9674648887f73980cc458c6de378f57884.jpg'},
+            {value: 3, color: 'purple', artist: 'Ellie Goulding', album: 'Halcyon Days', url: 'images/Ellie_Goulding_-_Halcyon_Days_500x500.png', largeUrl: 'images/ellie-goulding-bg.jpg', fab: 'ellie-blue'},
+            {value: 8, color: 'vivid', artist: 'One Republic', album: 'Native', url: 'images/one-republic.jpg', size: 'cover'},
+            {value: 5, color: 'mulberry', artist: 'The Strokes', album: 'Comedown Machine', url: 'images/strokes-comedownmachine.jpg'},
+            {value: 4, color: 'yellow', fab: 'pharrell-fab', artist: 'Pharrell Williams', album: 'GIRL', url: 'images/Pharrell-Girl-bright.jpg', largeUrl: 'images/20150204_pharrellwilliams_sgp.jpg'},
+            {value: 6, color: 'sap', artist: 'Flipsyde', album: 'We The People', url: 'images/flipside.jpg', largeUrl: 'images/flipside.jpg'},
+            {value: 4, color: 'jagular', fab: 'jagular', artist: 'Rhye', album: 'Woman', url: 'images/rhye-woman.jpeg', largeUrl: 'images/rhye-woman.jpeg'},
+            {value: 7, color: 'athens', artist: 'Jamie Lidell', album: 'Jamie Lidell', url: 'images/Jamie-Lidell-Cover.jpg', largeUrl: 'images/Jamie-Lidell-Cover.jpg'},
+            {value: 10, color: 'egyptian-blue', artist: 'Neon Trees', album: 'Pop Psychology', url: 'images/Neon_Trees_Pop_Psychology.jpg', largeUrl: 'images/Neon_Trees_Pop_Psychology.jpg'},
+            {value: 9, color: 'william', artist: 'Foster The People', album: 'Supermodel', url: 'images/foster-the-people.jpg', largeUrl: 'images/foster-the-people.jpg'},
+            {value: 10, color: 'charcoal', artist: 'Fitz And The Tantrums', album: 'More Than Just A Dream', url: 'images/More_Than_Just_A_Dream.jpg', largeUrl: 'images/Fitz-Tantrums-More-Than-Just-Dream.jpg'}
+          ]
+        }
+      },
+
+      animationConfig: {
+        type: Object,
+        value: function() {
+          return {
+            'exit': [{
+              name: 'ripple-animation',
+              id: 'ripple',
+              fromPage: this
+            }, {
+              name: 'hero-animation',
+              id: 'hero',
+              fromPage: this
+            }]
+          }
+        }
+      }
+
+    },
+
+    listeners: {
+      click: '_onClick'
+    },
+
+    _computeTileClass: function(color) {
+      return 'footer ' + color + '-300';
+    },
+
+    _computeStyle: function(url, color, size) {
+      return 'background-image: url("'+ url + '"); background-color:' + color + '-300';
+    },
+
+    _onClick: function(event) {
+      var target = event.target;
+
+      while (target !== this && !target._templateInstance) {
+        target = target.parentNode;
+      }
+
+      // configure the page animation
+      this.sharedElements = {
+        'hero': target,
+        'ripple': target
+      };
+      this.animationConfig['exit'][0].gesture = {
+        x: event.x || event.pageX,
+        y: event.y || event.pageY
+      };
+
+      this.fire('tile-click', {
+        tile: target,
+        data: target._templateInstance.item
+      });
+    }
+
+  });
+
+</script>
