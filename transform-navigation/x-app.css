@@ -50,6 +50,13 @@ paper-tabs[align-bottom] {
   box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.15);
 }
 
+.large #drawerMenu {
+  display: none;
+}
+
+.small paper-tabs {
+  display: none;
+}
 
 #navheader {
   font-size: inherit;
@@ -80,3 +87,5 @@ paper-tabs[align-bottom] {
   font-size: small;
   opacity: 0.8;
 }
+
+
