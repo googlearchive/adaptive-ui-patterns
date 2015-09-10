@@ -1,0 +1,245 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<dom-module id="pesto-recipe-overlay">
+
+  <style>
+    :host {
+      background: white;
+      color: black;
+      z-index: 2000;
+    }
+
+    paper-toolbar {
+      background-color: transparent;
+    }
+
+    .main-card {
+      background-color: white;
+      height: 299px;
+      width: 90%;
+      margin:0 auto;
+    }
+
+    .main-card h2 {
+      font-size: 48px;
+      font-weight: 400;
+    }
+    .col-slim {
+      width: 130px;
+      text-align: center;
+      color: var(--default-primary-color);
+    }
+
+    .col-leaf {
+      margin-top: 100px;
+      margin-bottom: 20px;
+    }
+
+    .recipe-text {
+      color: #8C8C8C;
+      font-size: 19px;
+    }
+
+    #overlayContainer {
+      background-size: cover;
+      right: -1px; /*Account for 1px edge introduced by card*/
+    }
+
+    paper-fab {
+      right: 86px;
+      bottom: 290px;
+      position: fixed;
+      z-index: 10;
+    }
+
+    .col-slim iron-icon {
+      width: 48px;
+      height: 48px;
+      margin-top: 40px;
+    }
+
+    paper-menu {
+      display: block;
+    }
+    paper-menu-button {
+      margin: auto;
+    }
+    iron-image {
+      padding: 1em;
+    }
+    .item {
+      max-width: 300px;
+    }
+    .horizontal-section {
+      text-align: center;
+    }
+
+    .dropdown-content {
+      width: 400px;
+    }
+
+    .dropdown-content iron-icon {
+      padding: 5px;
+    }
+
+    /* Background displayed in adaptive mode */
+    /* only for paper-menu-dropdown */
+    #backgroundOverlay {
+      background-color: black;
+      width: 100%;
+      opacity: 0.5;
+      z-index: 10;
+      display: none;
+      will-change: transform;
+      z-index: 14;
+    }
+
+    #overlayContainer paper-menu-button {
+      margin-right: -32px;
+    }
+
+    @media (max-width: 640px) {
+
+      #overlayContainer .main-card {
+        width: 100%;
+      }
+
+      #overlayContainer {
+        background-size: 200%;
+      }
+
+      #overlayContainer .main-card h2 {
+        font-size: 32px;
+      }
+
+      .dropdown-content {
+        bottom: 0;
+        top: initial;
+        position: fixed;
+        right: 0;
+        left: 0;
+      }
+
+      /*Q: How do you change the width of the paper-dropdown-menu?*/
+
+      #overlayShare paper-material {
+        bottom: 0;
+        top: initial;
+        width: 100%;
+      }
+
+      paper-fab {
+        bottom: 245px;
+        position: fixed;
+        z-index: 10;
+        right: -14px;
+      }
+    }
+  </style>
+
+  <template>
+    <iron-media-query query="min-width: 640px" query-matches="{{largeScreen}}">
+    </iron-media-query>
+
+    <div class="layout horizontal fit unresolved" id="overlayContainer">
+      <div id="backgroundOverlay" class="hidden layout horizontal fit" on-click="_hideBackgroundOverlay"></div>
+      <paper-toolbar class="flex">
+        <paper-icon-button icon="arrow-back" on-click="_closeOverlay"></paper-icon-button>
+        <span class="flex"></span>
+
+        <!-- By default the menu-buttom approach will be used on desktop -->
+        <paper-menu-button id="overlayShare" horizontal-offset="-150" vertical-offset="20" on-click="_menuTriggered">
+            <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+              <paper-item><paper-button><iron-icon src="../../images/pesto-menu-share.png"></iron-icon>Tweet recipe</paper-item>
+              <paper-item><paper-button><iron-icon src="../../images/pesto-menu-email.png"></iron-icon> Email recipe</paper-button></paper-item>
+              <paper-item><paper-button><iron-icon src="../../images/pesto-menu-discuss.png"></iron-icon>Message recipe</paper-button></paper-item>
+              <paper-item><paper-button><iron-icon src="../../images/pesto-menu-facebook.png"></iron-icon>Share on Facebook</paper-button></paper-item>
+            </paper-menu>
+        </paper-menu-button>
+
+      </paper-toolbar>
+
+      <paper-fab src="../../images/pesto-heart.png" title="heart" tabindex="0"></paper-fab>
+
+      <paper-material class="main-card layout horizontal fixed-bottom">
+        <div class="layout vertical">
+          <div class="layout horizontal">
+            <div class="col-slim">
+              <iron-icon src="../../images/leaf.png"></iron-icon>
+            </div>
+            <div><h2 contenteditable>{{recipe.name}}</h2></div>
+          </div>
+
+          <div class="layout horizontal">
+            <div class="col-slim"></div>
+            <div class="recipe-text flex"><p contenteditable>{{recipe.text}}</p></div>
+          </div>
+
+           <div class="layout horizontal">
+            <div class="col-slim">2 lbs</div>
+            <div><p>Sprouts</p></div>
+          </div>
+
+        </div>
+      </paper-material>
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+(function() {
+
+  Polymer({
+
+    is: 'pesto-recipe-overlay',
+
+    behaviors: [
+      Polymer.IronOverlayBehavior
+    ],
+    properties: {
+      recipe: {
+        type: Object,
+        notify: true,
+        observer: '_recipeObserver'
+      }
+    },
+    _recipeObserver: function() {
+      this.$.overlayContainer.style.backgroundImage = 'url(' + this.recipe.url + ')';
+    },
+    _closeOverlay: function() {
+      this.close();
+    },
+    _hideBackgroundOverlay: function() {
+      this.$.backgroundOverlay.style.display = 'none';
+    },
+    _menuTriggered: function() {
+      // backgroundOverlay only needs to display when we've switched to
+      // adative mode on mobile and are trying to show the menu in the
+      // bottom part of the viewport.
+      if (!this.largeScreen) {
+        this.$.backgroundOverlay.style.display = 'block';
+      }
+    }
+  });
+
+})();
+
+</script>
+
+<!--
+
+-->
