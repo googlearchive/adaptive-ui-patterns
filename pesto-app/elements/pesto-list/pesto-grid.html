@@ -1,0 +1,188 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="pesto-grid">
+
+  <style>
+
+    :host {
+      display: block;
+    }
+    .card {
+      background-color: #fff;
+      max-height: 400px;
+      min-width: 491px;
+    }
+
+    .card, .date-card {
+      -webkit-transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .card[narrow] {
+      min-height: 0;
+      box-shadow: none;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .content {
+      position: relative;
+      font-family: 'Josefin Sans', Futura, "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .content iron-image {
+      width: 100%;
+      max-height: 300px;
+    }
+
+    .content .bread {
+      padding-right: 20px;
+    }
+
+    .content .card-content {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      margin-left: 11px;
+    }
+
+    .name {
+      font-weight: 600;
+      color: var(--card-heading-color);
+      font-size: 26px;
+      line-height: 30px;
+    }
+
+    .author {
+      font-weight: 300;
+      color: var(--card-author-color);
+    }
+
+    [collapsible-content] {
+      padding: 16px 16px 40px;
+    }
+
+    .card[narrow] [collpsible-content] {
+      padding: 16px 16px 24px;
+    }
+
+    .desc {
+      font-size: 16px;
+    }
+
+    .toggle-icon {
+      position: absolute;
+      right: 8px;
+      bottom: 4px;
+      --iron-icon-width: 40px;
+      --iron-icon-height: 40px;
+      padding: 8px;
+      color: #4FB6F7;
+      cursor: pointer;
+    }
+
+    .card:not([narrow]) .toggle-icon {
+      display: none;
+    }
+
+    .card[opened] .toggle-icon {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+
+    template {
+      display: none;
+    }
+
+    @media (max-width: 1280px) {
+      .card {
+        max-height: 400px;
+        min-width: 401px;
+      }
+    }
+    @media (max-width: 640px) {
+      collapsible-card {
+        margin: 6px;
+      }
+
+      .card {
+        max-height: 400px;
+        min-width: 330px;
+      }
+    }
+
+  /* tablet-small */
+  @media all and (min-width: 600px) and (orientation: portrait) {
+    .card {
+      max-height: 400px;
+      min-width: 100%;
+    }
+  }
+
+        .sized {
+        width: 200px;
+        height: 200px;
+      }
+      .gray {
+        background-color: lightgray;
+      }
+  </style>
+
+  <template>
+
+    <grid-list class="layout center-center">
+
+        <template is="dom-repeat" items="[[schedule]]">
+
+          <collapsible-card class="card" cascaded opened="[[!narrowLayout]]" narrow$="{{narrowLayout}}" on-click="clickCard">
+
+              <div class="content">
+                <iron-image sizing="cover" class="sized gray" src$="[[item.url]]"></iron-image>
+                <div class="card-content layout horizontal">
+                  <div><img class="bread" width="36px" height="36px" src="../../images/bread.png" height="66" width="72"></img></div>
+                  <div class="flex">
+                    <div class="name">[[item.name]]</div>
+                    <div class="author">By <span>[[item.author]]</span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </collapsible-card>
+
+      </template>
+    </grid-list>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'pesto-grid',
+
+      properties: {
+
+        schedule: {
+          type: Array
+        },
+
+        narrowLayout: {
+          type: Boolean,
+          value: false
+        }
+      },
+      clickCard: function(e) {
+        this.fire('pesto-grid-select', e.model.__data__.item);
+      }
+    });
+
+  </script>
+
+</dom-module>
