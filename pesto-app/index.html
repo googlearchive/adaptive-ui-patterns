@@ -1,0 +1,180 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Pesto" />
+  <title>Pesto</title>
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Pesto">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+
+  <!-- For shared styles, shared-styles.html import in elements.html -->
+  <style is="custom-style" include="shared-styles"></style>
+
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+  <span id="browser-sync-binding"></span>
+  <template is="dom-bind" id="app">
+
+    <paper-drawer-panel id="paperDrawerPanel" responsive-width="960px">
+      <!-- Drawer Scroll Header Panel -->
+      <paper-scroll-header-panel drawer fixed class$="{{condenseState}}">
+
+        <!-- Drawer Toolbar -->
+        <paper-toolbar id="drawerToolbar">
+          <span class="paper-circle"></span>
+        </paper-toolbar>
+
+        <!-- Drawer Content -->
+        <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
+          <a data-route="home" href="/" on-click="onDataRouteClick">
+            <span>Home</span>
+          </a>
+
+          <a data-route="favorite" href="/favorite" on-click="onDataRouteClick">
+            <span>Favorite</span>
+          </a>
+
+          <a data-route="saved" href="/saved" on-click="onDataRouteClick">
+            <span>Saved</span>
+          </a>
+
+          <a data-route="trending" href="/trending" on-click="onDataRouteClick">
+            <span>Trending</span>
+          </a>
+
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <!-- Main Area -->
+      <paper-scroll-header-panel main condenses keep-condensed-header>
+
+        <!-- Main Toolbar -->
+        <paper-toolbar id="mainToolbar" class="tall" >
+          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+
+          <span class="flex"></span>
+          <!-- Toolbar icons -->
+          <paper-icon-button icon="search"></paper-icon-button>
+
+          <!-- Application name -->
+          <div id="logoContainer" class$="{{condenseState}}">
+            <div class="app-name" hidden>Pesto</div>
+            <div class="logo"></div>
+          </div>
+        </paper-toolbar>
+
+        <iron-media-query query="min-width: 640px" query-matches="{{largeScreen}}" on-query-matches="setScreensizeClasses">
+        </iron-media-query>
+
+        <!-- Main Content -->
+        <div class="content">
+          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+            <section data-route="home">
+              <paper-fab src="images/pesto-write-export.png" title="arrow-forward" tabindex="0"></paper-fab>
+              <div id="pages" class="layout horizontal row">
+                <pesto-list></pesto-list>
+              </div>
+            </section>
+
+            <section data-route="favorite">
+              <paper-material elevation="1">
+                <h2 class="page-title">Favorite</h2>
+                <p>This is the favorite section</p>
+              </paper-material>
+            </section>
+
+            <section data-route="user-info">
+              <paper-material elevation="1">
+                <h2 class="page-title">
+                User:<span>{{params.name}}</span>
+                </h2>
+                <div>This is <span>{{params.name}}</span>'s section</div>
+              </paper-material>
+            </section>
+
+            <section data-route="saved">
+              <paper-material elevation="1">
+                <h2 class="page-title">Saved</h2>
+                <p>This is the saved section</p>
+              </paper-material>
+            </section>
+
+            <section data-route="trending">
+              <paper-material elevation="1">
+                <h2 class="page-title">Trending</h2>
+                <p>This is the trending section</p>
+              </paper-material>
+            </section>
+
+            <section data-route="recipe">
+              <paper-material elevation="1" class="layout horizontal fit">
+                <paper-button raised>Back</paper-button>
+                <h2 class="page-title">Recipe</h2>
+                <span>{{recipe.url}}</span>
+                <p>This is the contact recipe</p>
+              </paper-material>
+            </section>
+
+          </iron-pages>
+
+          <pesto-recipe-overlay id="recipe"></pesto-recipe-overlay>
+
+
+        </div>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+  </template>
+
+  <script src="scripts/app.js"></script>
+</body>
+
+</html>
