@@ -1,0 +1,85 @@
+
+<dom-module id="pesto-clock">
+  <style>
+    :host {
+      display: block;
+    }
+    .timer-overlay {
+      width: 480px;
+      height: 285px;
+      background-color: white;
+      display: block;
+    }
+
+    .timer-overlay .time {
+      background-color: #00AC8D;
+      color: var(--text-primary-color);
+      font-size: 45px;
+      min-width: 158px;
+    }
+
+    .timer-overlay .clock {
+      width: 211px;
+      height: 211px;
+      background-color: #ccc;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .timer-overlay .primary {
+      color: #FFFFFF;
+    }
+
+    .timer-overlay .secondary {
+      color: #B1E5DD;
+    }
+
+    @media (max-width: 640px) {
+      .timer-overlay  {
+        width: 240px;
+        height: 353;
+      }
+    }
+
+  </style>
+  <template>
+    <div class="layout horizontal timer-overlay">
+      <!-- side clock -->
+      <div class="time layout vertical center-center">
+        <span class="layout horizontal">
+          <span class="primary">3</span>
+          <span class="secondary">:30</span>
+        </span>
+      </div>
+
+      <!-- primary clock -->
+      <div class="flex layout vertical">
+        <div class="flex layout horizontal center-center">
+          <div class="clock"></div>
+        </div>
+
+       <!-- toolbar -->
+      <div class="layout horizontal">
+        <div class="flex"></div>
+        <div class="layout horizontal">
+          <paper-button>Cancel</paper-button>
+          <paper-button>OK</paper-button>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'pesto-clock',
+      behaviors: [
+        Polymer.IronOverlayBehavior
+      ]
+    });
+  </script>
+</dom-module>
+
+
+</body>
