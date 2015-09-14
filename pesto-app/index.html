@@ -94,7 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+      <paper-scroll-header-panel main condenses keep-condensed-header class$="{{condenseState}}">
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall" >
@@ -105,7 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button icon="search"></paper-icon-button>
 
           <!-- Application name -->
-          <div id="logoContainer" class$="{{condenseState}}">
+          <div id="logoContainer" class="middle middle-container center horizontal layout">
             <div class="app-name" hidden>Pesto</div>
             <div class="logo"></div>
           </div>
@@ -120,6 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="home">
               <paper-fab src="images/pesto-write-export.png" title="arrow-forward" tabindex="0"></paper-fab>
+
               <div id="pages" class="layout horizontal row">
                 <pesto-list></pesto-list>
               </div>

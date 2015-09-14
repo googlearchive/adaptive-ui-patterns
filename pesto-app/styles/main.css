@@ -50,12 +50,29 @@ paper-toolbar.tall {
   height: 36px;
 }
 
+/* Todo: Move all of these into a central location. It sucks having
+media queries split between here and app-theme. */
+
 @media (min-width: 840px) {
   paper-fab {
     right: 0;
     margin: -30px 40px;
     position: fixed;
     z-index: 2;
+  }
+}
+
+/* Tablet */
+@media (min-width: 840px) and (max-width: 960px) {
+  .condensed paper-fab {
+    margin: -230px 40px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1280px) {
+  .condensed paper-fab {
+    margin: -200px 40px;
   }
 }
 

@@ -126,14 +126,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     transform-origin: left center;
   }
 
-
-  paper-scroll-header-panel {
-    --paper-scroll-header-panel-condensed-header: {
-      background-color: #f4b400;
-    };
-
-  }
-
   /* Height of the scroll area */
   .content {
     height: 900px;
@@ -155,6 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-size: 16px;
     padding-bottom: 8px;
   }
+
   /* Breakpoints */
 
   /* Small */
@@ -244,15 +237,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   margin: 0 auto;
  }
 
-  @media (max-width: 960px) {
-    .condensed .logo {
-      margin-top: 296px;
-    }
+@media all and (min-width: 600px) and (max-width: 960px) {
+  .condensed .logo {
+    margin-top: 296px;
   }
+}
 
-  @media (min-width: 960px) {
-    .condensed .logo {
-      margin-top: 230px;
-    }
+@media all and (min-width: 1280px) {
+  .condensed .logo {
+    margin-top: 230px;
   }
+}
+
 </style>
