@@ -1,3 +1,5 @@
+Update: Work on this repository has ceased. For the latest layout work see [app-layout](https://github.com/PolymerElements/app-layout) and for the latest implementation of the Pesto app, see [here](https://github.com/PolymerElements/app-layout/tree/master/templates/pesto).
+
 ## Adaptive UI Patterns
 
 Explorations following the evolving Adaptive UI sections of the Material Design spec. Please note that all of this work should be considered experimental. It is geared towards prototyping.
